@@ -10,7 +10,7 @@ services:
   hello_world.logger.channel.hello_world:
     parent: logger.channel_base
     arguments: ['hello_world']
-  # hello_world.logger.mail_logger:
-  #   class: Drupal\hello_world\Logger\MailLogger
-  #   tags:
-  #   - { name: logger }
+  hello_world.logger.mail_logger:
+    class: Drupal\hello_world\Logger\MailLogger
+    tags:
+    - { name: logger }
