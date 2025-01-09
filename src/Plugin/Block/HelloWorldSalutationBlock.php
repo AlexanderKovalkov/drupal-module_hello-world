@@ -55,8 +55,6 @@ class HelloWorldSalutationBlock extends BlockBase implements ContainerFactoryPlu
     {
         $config = $this->getConfiguration();
 
-        var_dump($config);
-
         if (!empty($config['enabled'])) {
             return [
                 '#markup' => $this->salutation->getSalutation(),
