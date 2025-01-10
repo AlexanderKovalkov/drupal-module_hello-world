@@ -50,10 +50,15 @@ class MailLogger implements LoggerInterface
      */
     public function log($level, \Stringable|string $message, array $context = []): void
     {
+        // фильтруем толко сообщения об ошибках
         if ($level !== RfcLogLevel::ERROR) {
             return;
         }
 
+        // отлавливаем только ошибки модуля
+        if ($context['channel'] !== 'hello_world') {
+            return;
+        }
         // $to = $this->configFactory->get('system.site')->get('mail'); 
         // тест коммита
         $to = \Drupal::config('hello_world.settings')->get('mail');
