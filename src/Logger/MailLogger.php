@@ -56,8 +56,8 @@ class MailLogger implements LoggerInterface
 
         // $to = $this->configFactory->get('system.site')->get('mail'); 
         // тест коммита
-        //$to = \Drupal::config('hello_world.settings')->get('mail');
-        $to = 'a.v.kovalkov@gmail.com';
+        $to = \Drupal::config('hello_world.settings')->get('mail');
+        // $to = 'a.v.kovalkov@gmail.com';
         $langcode = $this->configFactory->get('system.site')->get('langcode');
         $variables = $this->parser->parseMessagePlaceholders($message, $context);
         $markup = new FormattableMarkup($message, $variables);
