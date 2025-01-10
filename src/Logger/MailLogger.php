@@ -50,9 +50,9 @@ class MailLogger implements LoggerInterface
      */
     public function log($level, \Stringable|string $message, array $context = []): void
     {
-        // if ($level !== RfcLogLevel::ERROR) {
-        //     return;
-        // }
+        if ($level !== RfcLogLevel::ERROR) {
+            return;
+        }
 
         // $to = $this->configFactory->get('system.site')->get('mail'); 
         // тест коммита
