@@ -55,7 +55,7 @@ class MailLogger implements LoggerInterface
             return;
         }
 
-        // отлавливаем только ошибки модуля
+        // отлавливаем только ошибки модуля hello_world
         if ($context['channel'] !== 'hello_world') {
             return;
         }

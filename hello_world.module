@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Render\BubbleableMetadata;
 
 /**
  * Implements hook_help().
@@ -50,8 +51,58 @@ function hello_world_mail($key, &$message, $params)
             $message['body'][] = $params['message'];
             $user_message = 'The user that was logged in: [current-user:name].';
             $message['body'][] = \Drupal::token()->replace($user_message, ['current-user' => \Drupal::currentUser()]);
-
             break;
     }
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function hello_world_token_info()
+{
+    $type = [
+        'name' => t('Hello World'),
+        'description' => t('Tokens related to the Hello World module.'),
+    ];
+
+    $tokens['salutation'] = [
+        'name' => t('Salutation'),
+        'description' => t('The Hello World salutation value.'),
+    ];
+
+    return [
+        'types' => ['hello_world' => $type],
+        'tokens' => ['hello_world' => $tokens],
+    ];
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function hello_world_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata)
+{
+    $replacements = [];
+    if ($type == 'hello_world') {
+        foreach ($tokens as $name => $original) {
+            switch ($name) {
+                case 'salutation':
+                    $replacements[$original] = \Drupal::service('hello_world.salutation')->getSalutation();
+                    $config = \Drupal::config('hello_world.custom_salutation');
+                    $bubbleable_metadata->addCacheableDependency($config);
+                    break;
+            }
+        }
+    }
+    return $replacements;
+}
+
+/**
+ * Выводим токен в файле шаблона как твиг ['hello_world_message']
+ * Implements hook_preprocess_page().
+ */
+function hello_world_preprocess_page(&$variables)
+{
+    $message = \Drupal::token()->replace('[hello_world:salutation]');
+    $variables['hello_world_message'] = $message;
 }
 
