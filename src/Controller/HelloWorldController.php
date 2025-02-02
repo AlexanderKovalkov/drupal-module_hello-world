@@ -38,6 +38,8 @@ class HelloWorldController extends ControllerBase
             $container->get('hello_world.salutation')
         );
     }
+    
+
     /**
      * Hello World.
      *
@@ -46,8 +48,7 @@ class HelloWorldController extends ControllerBase
      */
     public function helloWorld()
     {
-        return [
-            '#markup' => $this->salutation->getSalutation(),
-        ];
+        return $this->salutation->getSalutationComponent();
     }
+
 }

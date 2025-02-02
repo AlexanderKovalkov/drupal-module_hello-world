@@ -1,0 +1,13 @@
+<div {{ attributes }}>
+    {{ title_prefix }}
+    <strong>
+        {{ salutation }}
+    </strong>
+    {% if target %}
+        <em class="salutation--target">
+            {{ target }}
+        </em>
+    {% endif %}
+    {{ title_suffix }}
+</div>
+

@@ -72,4 +72,51 @@ class HelloWorldSalutation
             return $this->t('Good evening world');
         }
     }
+
+    /**
+     * Returns the Salutation render array.
+     */
+    public function getSalutationComponent()
+    {
+        $render = [
+            '#theme' => 'hello_world_salutation',
+            '#salutation' => [
+                '#contextual_links' => [
+                    'hello_world' => [
+                        'route_parameters' => [],
+                    ],
+                ],
+            ],
+        ];
+
+        $config = $this->configFactory->get('hello_world.custom_salutation');
+        $salutation = $config->get('salutation');
+
+        if ($salutation !== "" && $salutation) {
+            $event = new SalutationEvent();
+            $event->setValue($salutation);
+            $this->eventDispatcher->dispatch($event, SalutationEvent::EVENT);
+            $render['#salutation']['#markup'] = $event->getValue();
+            $render['#overridden'] = TRUE;
+            return $render;
+        }
+
+        $time = new \DateTime();
+        $render['#target'] = $this->t('world');
+
+        if ((int) $time->format('G') >= 00 && (int) $time->format('G') < 12) {
+            $render['#salutation']['#markup'] = $this->t('Good morning');
+            return $render;
+        }
+
+        if ((int) $time->format('G') >= 12 && (int) $time->format('G') < 18) {
+            $render['#salutation']['#markup'] = $this->t('Good afternoon');
+            return $render;
+        }
+
+        if ((int) $time->format('G') >= 18) {
+            $render['#salutation']['#markup'] = $this->t('Good evening');
+            return $render;
+        }
+    }
 }
